@@ -1,10 +1,21 @@
 package it.unibo.mvc;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  * This class is a simple application that writes a random number on a file.
@@ -55,14 +66,37 @@ public class BadIOGUI {
         // }
         // }
         // });
-        JPanel primary = new JPanel();
+
+        // part 1
+        final JPanel primary = new JPanel();
         primary.setLayout(new BorderLayout());
         frame.setContentPane(primary);
-        JPanel canvas = new JPanel();
+        final JPanel canvas = new JPanel();
         canvas.setLayout(new BoxLayout(canvas, BoxLayout.X_AXIS));
         primary.add(canvas, BorderLayout.CENTER);
-        JButton button = new JButton("write");
-        canvas.add(button);
+        final JButton write = new JButton("write");
+        canvas.add(write);
+        write.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent arg0) {
+                try (PrintStream ps = new PrintStream(PATH, StandardCharsets.UTF_8)) {
+                    ps.print(randomGenerator.nextInt());
+                } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(frame, e1, "Error", JOptionPane.ERROR_MESSAGE);
+                    e1.printStackTrace(); // NOPMD: allowed as this is just an exercise
+                }
+            }
+        });
+
+        // part 2
+        final JButton read = new JButton("read");
+        canvas.add(read);
+        read.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent arg0) {
+                System.out.println("you clicked the read button!\n"); // NOPMD: just an exercise
+            }
+        });
     }
 
     private void display() {
