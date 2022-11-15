@@ -1,19 +1,10 @@
 package it.unibo.mvc;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Random;
+
+import javax.swing.*;
 
 /**
  * This class is a simple application that writes a random number on a file.
@@ -22,6 +13,7 @@ import java.util.Random;
  * such is just to be used to learn the basics, not as a template for your
  * applications.
  */
+@SuppressWarnings("unused")
 public class BadIOGUI {
 
     private static final String TITLE = "A very simple GUI application";
@@ -36,33 +28,41 @@ public class BadIOGUI {
      * Creates a new BadIOGUI.
      */
     public BadIOGUI() {
-        final JPanel canvas = new JPanel();
-        canvas.setLayout(new BorderLayout());
-        final JButton write = new JButton("Write on file");
-        canvas.add(write, BorderLayout.CENTER);
-        frame.setContentPane(canvas);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        /*
-         * Handlers
-         */
-        write.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                /*
-                 * This would be VERY BAD in a real application.
-                 * 
-                 * This makes the Event Dispatch Thread (EDT) work on an I/O
-                 * operation. I/O operations may take a long time, during which
-                 * your UI becomes completely unresponsive.
-                 */
-                try (PrintStream ps = new PrintStream(PATH, StandardCharsets.UTF_8)) {
-                    ps.print(randomGenerator.nextInt());
-                } catch (IOException e1) {
-                    JOptionPane.showMessageDialog(frame, e1, "Error", JOptionPane.ERROR_MESSAGE);
-                    e1.printStackTrace(); // NOPMD: allowed as this is just an exercise
-                }
-            }
-        });
+        // final JPanel canvas = new JPanel();
+        // canvas.setLayout(new BorderLayout());
+        // final JButton write = new JButton("Write on file");
+        // canvas.add(write, BorderLayout.CENTER);
+        // frame.setContentPane(canvas);
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // /*
+        // * Handlers
+        // */
+        // write.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(final ActionEvent e) {
+        // /*
+        // * This would be VERY BAD in a real application.
+        // *
+        // * This makes the Event Dispatch Thread (EDT) work on an I/O
+        // * operation. I/O operations may take a long time, during which
+        // * your UI becomes completely unresponsive.
+        // */
+        // try (PrintStream ps = new PrintStream(PATH, StandardCharsets.UTF_8)) {
+        // ps.print(randomGenerator.nextInt());
+        // } catch (IOException e1) {
+        // JOptionPane.showMessageDialog(frame, e1, "Error", JOptionPane.ERROR_MESSAGE);
+        // e1.printStackTrace(); // NOPMD: allowed as this is just an exercise
+        // }
+        // }
+        // });
+        JPanel primary = new JPanel();
+        primary.setLayout(new BorderLayout());
+        frame.setContentPane(primary);
+        JPanel canvas = new JPanel();
+        canvas.setLayout(new BoxLayout(canvas, BoxLayout.X_AXIS));
+        primary.add(canvas, BorderLayout.CENTER);
+        JButton button = new JButton("write");
+        canvas.add(button);
     }
 
     private void display() {
@@ -84,6 +84,7 @@ public class BadIOGUI {
          * on screen. Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
+        frame.pack();
         /*
          * OK, ready to push the frame onscreen
          */
@@ -96,6 +97,6 @@ public class BadIOGUI {
      * @param args ignored
      */
     public static void main(final String... args) {
-       new BadIOGUI().display();
+        new BadIOGUI().display();
     }
 }
