@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.BoxLayout;
@@ -93,7 +95,15 @@ public class BadIOGUI {
         canvas.add(read);
         read.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(final ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent e) {
+                try {
+                    final List<String> lines = Files.readAllLines(new File(PATH).toPath());
+                    for (final String line : lines) {
+                        System.out.println(line); // NOPMD: just an exercise
+                    }
+                } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(canvas, e1, "Error", JOptionPane.ERROR_MESSAGE);
+                }
                 System.out.println("you clicked the read button!\n"); // NOPMD: just an exercise
             }
         });
